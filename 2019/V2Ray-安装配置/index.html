@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <title>V2Ray 安装配置 - TILDEN BLOG</title>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="HandheldFriendly" content="True" />
+
+
+<meta name="description" content="季天冬的个人博客" />
+
+  <meta name="keywords" content="V2Ray,配置,科学上网," />
+
+
+
+
+
+
+
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<meta name="generator" content="Hexo" />
+
+
+<meta name="description" content="简单记录一下有点繁琐的 V2Ray 安装过程，供日后复制粘贴。方案采用的是据说很安全的 WebSocket+TLS+Nginx。网站正常访问的情况下是一个无害 https 静态站，真实面目却是一个罪恶（滑稽）的偷渡网站。">
+<meta name="keywords" content="V2Ray,配置,科学上网">
+<meta property="og:type" content="article">
+<meta property="og:title" content="V2Ray 安装配置">
+<meta property="og:url" content="http:&#x2F;&#x2F;itiandong.com&#x2F;2019&#x2F;V2Ray-%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE&#x2F;">
+<meta property="og:site_name" content="TILDEN BLOG">
+<meta property="og:description" content="简单记录一下有点繁琐的 V2Ray 安装过程，供日后复制粘贴。方案采用的是据说很安全的 WebSocket+TLS+Nginx。网站正常访问的情况下是一个无害 https 静态站，真实面目却是一个罪恶（滑稽）的偷渡网站。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-11-04T09:57:41.897Z">
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+<link rel="icon" href="/images/favicon.png" />
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/han-css@3.3.0/dist/han.min.css">
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro|PT+Serif|Roboto+Slab|Noto+Serif+SC&display=swap">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/styles/atom-one-light.min.css">
+<link rel="stylesheet" href="/css/main.css">
+
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="site-name">
+      <a class="logo" href="http://itiandong.com">TILDEN BLOG</a>
+      <span class="description">Code & Love</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+    <div class="row">
+      <section class="content col-md-8 col-12 han-init-context">
+        
+  <article>
+    <h1 class="post-title">
+      <a href="/2019/V2Ray-%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/">V2Ray 安装配置</a>
+    </h1>
+    <div class="post-meta">
+      <span class="post-meta-item post-meta-date">
+  <time datetime="2019-11-02T06:21:31+00:00">2019-11-02</time>
+</span>
+
+<span class="post-meta-item post-meta-categories">
+  <span class="post-meta-item-indicator">Category:</span>
+  
+    <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>, <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/">安装配置</a>
+  
+</span>
+
+<span class="post-meta-item post-meta-tags">
+  
+    <a class="tag-link" href="/tags/V2Ray/" rel="tag">V2Ray</a> <a class="tag-link" href="/tags/%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/" rel="tag">科学上网</a> <a class="tag-link" href="/tags/%E9%85%8D%E7%BD%AE/" rel="tag">配置</a>
+  
+</span>
+
+    </div>
+
+    
+
+    
+      <div class="post-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#时间校准"><span class="toc-text">时间校准</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置服务端"><span class="toc-text">配置服务端</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#生成-UUID"><span class="toc-text">生成 UUID</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#脚本安装-V2Ray"><span class="toc-text">脚本安装 V2Ray</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置-TLS"><span class="toc-text">配置 TLS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#添加域名解析"><span class="toc-text">添加域名解析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#生成证书"><span class="toc-text">生成证书</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#安装证书"><span class="toc-text">安装证书</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置服务端V2Ray"><span class="toc-text">配置服务端V2Ray</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置-Nginx"><span class="toc-text">配置 Nginx</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置客户端"><span class="toc-text">配置客户端</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CLI"><span class="toc-text">CLI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GUI"><span class="toc-text">GUI</span></a></li></ol></li></ol></div>
+    
+
+    <div class="post-content"><p>简单记录一下有点繁琐的 <code>V2Ray</code> 安装过程，供日后复制粘贴。方案采用的是据说很安全的 <code>WebSocket+TLS+Nginx</code>。网站正常访问的情况下是一个无害 https 静态站，真实面目却是一个罪恶（滑稽）的偷渡网站。</p>
+<a id="more"></a>
+
+<p>服务器选用的 <code>Vultr</code> 的洛杉矶区，系统使用的 <code>Ubuntu 18.04</code>，客户端是 <code>Win10</code>，配合火狐插件 <code>Proxy SwichyOmega</code>食用。</p>
+<h2 id="时间校准"><a href="#时间校准" class="headerlink" title="时间校准"></a>时间校准</h2><p>对于 V2Ray，它的验证方式包含时间，就算是配置没有任何问题，如果时间不正确，也无法连接 V2Ray 服务器的。需要保证时间误差在<strong>90秒</strong>之内就没问题。</p>
+<p>查看系统时间</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">date -R</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Sat, 02 Nov 2019 04:37:43 +0000</span><br></pre></td></tr></table></figure>
+
+<p>如此处换算成东八区与标准时间相同，否则，通过 <code>date --set=&quot;xxxx-xx-xx xx:xx:xx&quot;</code> 设置。</p>
+<h2 id="配置服务端"><a href="#配置服务端" class="headerlink" title="配置服务端"></a>配置服务端</h2><h3 id="生成-UUID"><a href="#生成-UUID" class="headerlink" title="生成 UUID"></a>生成 UUID</h3><p>在后续配置当中，有一个 <code>id</code> ，作用类似于 <code>ss</code> 的密码, <code>VMess</code> 的 <code>id</code> 的格式必须与 <code>UUID</code> 格式相同。 </p>
+<p>两种方式生成：</p>
+<ol>
+<li><code>cat /proc/sys/kernel/random/uuid</code> </li>
+<li><a href="https://www.uuidgenerator.net/" target="_blank" rel="noopener">UUID Generator</a> </li>
+</ol>
+<h3 id="脚本安装-V2Ray"><a href="#脚本安装-V2Ray" class="headerlink" title="脚本安装 V2Ray"></a>脚本安装 V2Ray</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt update</span><br><span class="line">apt upgrade</span><br><span class="line">bash &lt;(curl -L -s https://install.direct/go.sh)</span><br></pre></td></tr></table></figure>
+
+<p>此脚本会自动安装以下文件：</p>
+<ul>
+<li><code>/usr/bin/v2ray/v2ray</code>：V2Ray 程序；</li>
+<li><code>/usr/bin/v2ray/v2ctl</code>：V2Ray 工具；</li>
+<li><code>/etc/v2ray/config.json</code>：配置文件；</li>
+<li><code>/usr/bin/v2ray/geoip.dat</code>：IP 数据文件</li>
+<li><code>/usr/bin/v2ray/geosite.dat</code>：域名数据文件</li>
+</ul>
+<p>如果是更新，执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo bash go.sh</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置-TLS"><a href="#配置-TLS" class="headerlink" title="配置 TLS"></a>配置 TLS</h3><h4 id="添加域名解析"><a href="#添加域名解析" class="headerlink" title="添加域名解析"></a>添加域名解析</h4><p>在域名<code>DNS 面板</code>添加 <code>A记录</code>，指向服务器的 IP 地址。后文使用 <code>free.itiandong.com</code> 域名，已指向了 Vultr 服务器。</p>
+<h4 id="生成证书"><a href="#生成证书" class="headerlink" title="生成证书"></a>生成证书</h4><p>因为我是傻瓜，这里使用傻瓜脚本。执行以下命令，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt install socat</span><br><span class="line">curl  https://get.acme.sh | sh</span><br></pre></td></tr></table></figure>
+
+<p>输入下列命令生成证书，证书有两种，<code>ECC</code> 和 <code>RSA</code>。这里选用兼容性更好的 <code>RSA</code> 方案，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo ~/.acme.sh/acme.sh \</span><br><span class="line">--issue -d free.itiandong.com \</span><br><span class="line">--standalone -k 4096</span><br></pre></td></tr></table></figure>
+
+<p>值得一提的是，acme.sh 脚本会每 60 天自动更新证书。也可以选择手动更新，命令如下，</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo ~/.acme.sh/acme.sh --renew \</span><br><span class="line">-d free.itiandong.com --force</span><br></pre></td></tr></table></figure>
+
+<h4 id="安装证书"><a href="#安装证书" class="headerlink" title="安装证书"></a>安装证书</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo ~/.acme.sh/acme.sh \</span><br><span class="line">--installcert -d free.itiandong.com \</span><br><span class="line">--fullchainpath /etc/v2ray/v2ray.crt \</span><br><span class="line">--keypath /etc/v2ray/v2ray.key</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置服务端V2Ray"><a href="#配置服务端V2Ray" class="headerlink" title="配置服务端V2Ray"></a>配置服务端V2Ray</h3><p><strong><code>config.json</code></strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"inbounds"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"port"</span>: <span class="number">10000</span>,</span><br><span class="line">      "listen":"127.0.0.1",//只监听 127.0.0.1，避免除本机外的机器探测到开放了 10000 端口</span><br><span class="line">      "protocol": "vmess",</span><br><span class="line">      "settings": &#123;</span><br><span class="line">        "clients": [</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">"id"</span>: <span class="string">"&lt;填入生成的 UUID &gt;"</span>,</span><br><span class="line">            <span class="attr">"alterId"</span>: <span class="number">64</span></span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;,</span><br><span class="line">      "streamSettings": &#123;</span><br><span class="line">        "network": "ws",</span><br><span class="line">        "wsSettings": &#123;</span><br><span class="line">        "path": "/free"</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  "outbounds": [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"protocol"</span>: <span class="string">"freedom"</span>,</span><br><span class="line">      <span class="attr">"settings"</span>: &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置-Nginx"><a href="#配置-Nginx" class="headerlink" title="配置 Nginx"></a>配置 Nginx</h3><p>目的是伪装成一个无害的静态站，同时然后转发客户端请求给服务端。</p>
+<p>首先安装 <code>nginx</code>,</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install nginx</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>nginx.conf</code></strong> 添加以下内容：</p>
+<p>强制转发 <code>http</code> 到 <code>https</code>：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server</span> <span class="string">&#123;  </span></span><br><span class="line">    <span class="attr">listen</span>  <span class="string">80;</span></span><br><span class="line">    <span class="attr">server_name</span> <span class="string">free.itiandong.com;</span></span><br><span class="line">	<span class="attr">rewrite</span> <span class="string">^(.*)$  https://$host$1 permanent;</span></span><br><span class="line"><span class="attr">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>配置静态服务器以及转发请求：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server</span> <span class="string">&#123;</span></span><br><span class="line">    <span class="attr">listen</span>  <span class="string">443 ssl;</span></span><br><span class="line">    <span class="attr">ssl</span> <span class="string">on;</span></span><br><span class="line">    <span class="attr">ssl_certificate</span>       <span class="string">/etc/v2ray/v2ray.crt;</span></span><br><span class="line">    <span class="attr">ssl_certificate_key</span>   <span class="string">/etc/v2ray/v2ray.key;</span></span><br><span class="line">    <span class="attr">ssl_protocols</span>         <span class="string">TLSv1 TLSv1.1 TLSv1.2;</span></span><br><span class="line">    <span class="attr">ssl_ciphers</span>           <span class="string">HIGH:!aNULL:!MD5;</span></span><br><span class="line">    <span class="attr">server_name</span>           <span class="string">free.itiandong.com;</span></span><br><span class="line"></span><br><span class="line">	<span class="attr">location</span> <span class="string">/free &#123; # 与 V2Ray 配置中的 path 保持一致</span></span><br><span class="line">        <span class="attr">proxy_redirect</span> <span class="string">off;</span></span><br><span class="line">        <span class="attr">proxy_pass</span> <span class="string">http://127.0.0.1:10000;#假设WebSocket监听在环回地址的10000端口上</span></span><br><span class="line">        <span class="attr">proxy_http_version</span> <span class="string">1.1;</span></span><br><span class="line">        <span class="attr">proxy_set_header</span> <span class="string">Upgrade $http_upgrade;</span></span><br><span class="line">        <span class="attr">proxy_set_header</span> <span class="string">Connection "upgrade";</span></span><br><span class="line">        <span class="attr">proxy_set_header</span> <span class="string">Host $http_host;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">        # Show realip in v2ray access.log</span></span><br><span class="line">        <span class="attr">proxy_set_header</span> <span class="string">X-Real-IP $remote_addr;</span></span><br><span class="line">        <span class="attr">proxy_set_header</span> <span class="string">X-Forwarded-For $proxy_add_x_forwarded_for;</span></span><br><span class="line">    <span class="attr">&#125;</span></span><br><span class="line">    </span><br><span class="line">    <span class="attr">location</span> <span class="string">/ &#123;</span></span><br><span class="line">		<span class="attr">root</span> <span class="string">/home/www;</span></span><br><span class="line">		<span class="attr">index</span> <span class="string">index.html index.htm;</span></span><br><span class="line">	<span class="attr">&#125;</span></span><br><span class="line"><span class="attr">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>静态站放点啥呢？直接用 <code>Web编程课</code> 的某次课堂作业吧，2333：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/itiandong/project0-itiandong.git /home/www</span><br></pre></td></tr></table></figure>
+
+<p>想想还是重启下两个服务比较好？</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart v2ray</span><br><span class="line">systemctl restart nginx</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="配置客户端"><a href="#配置客户端" class="headerlink" title="配置客户端"></a>配置客户端</h2><h3 id="CLI"><a href="#CLI" class="headerlink" title="CLI"></a>CLI</h3><p>点<a href="https://github.com/v2ray/v2ray-core/releases" target="_blank" rel="noopener">这里</a>下载。</p>
+<p>配置<strong><code>config.json</code></strong>，监听<code>1081</code>端口，避免和 <code>ssr</code> 冲突。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"inbounds"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"port"</span>: <span class="number">1081</span>,</span><br><span class="line">      <span class="attr">"listen"</span>: <span class="string">"127.0.0.1"</span>,</span><br><span class="line">      <span class="attr">"protocol"</span>: <span class="string">"socks"</span>,</span><br><span class="line">      <span class="attr">"sniffing"</span>: &#123;</span><br><span class="line">        <span class="attr">"enabled"</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="attr">"destOverride"</span>: [<span class="string">"http"</span>, <span class="string">"tls"</span>]</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">"settings"</span>: &#123;</span><br><span class="line">        <span class="attr">"auth"</span>: <span class="string">"noauth"</span>,</span><br><span class="line">        <span class="attr">"udp"</span>: <span class="literal">false</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">"outbounds"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"protocol"</span>: <span class="string">"vmess"</span>,</span><br><span class="line">      <span class="attr">"settings"</span>: &#123;</span><br><span class="line">        <span class="attr">"vnext"</span>: [</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">"address"</span>: <span class="string">"free.itiandong.com"</span>,</span><br><span class="line">            <span class="attr">"port"</span>: <span class="number">443</span>,</span><br><span class="line">            <span class="attr">"users"</span>: [</span><br><span class="line">              &#123;</span><br><span class="line">                <span class="attr">"id"</span>: <span class="string">"&lt;填入生成的 UUID &gt;"</span>,</span><br><span class="line">                <span class="attr">"alterId"</span>: <span class="number">64</span></span><br><span class="line">              &#125;</span><br><span class="line">            ]</span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">"streamSettings"</span>: &#123;</span><br><span class="line">        <span class="attr">"network"</span>: <span class="string">"ws"</span>,</span><br><span class="line">        <span class="attr">"security"</span>: <span class="string">"tls"</span>,</span><br><span class="line">        <span class="attr">"wsSettings"</span>: &#123;</span><br><span class="line">          <span class="attr">"path"</span>: <span class="string">"/free"</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行 <code>v2ray.exe</code> 或者  <code>wv2ray.exe</code>  均可。前者有个 <code>cmd窗口</code>，后者没有。</p>
+<p>配合 <code>Proxy SwichyOmega</code> 即可食用。</p>
+<h3 id="GUI"><a href="#GUI" class="headerlink" title="GUI"></a>GUI</h3><p>GUI软件有很多，比如我所使用的：</p>
+<ol>
+<li>【Windows】 <a href="https://github.com/2dust/v2rayN" target="_blank" rel="noopener">v2rayN</a></li>
+<li>【Android】 <a href="https://github.com/2dust/v2rayNG" target="_blank" rel="noopener">v2rayNG</a></li>
+</ol>
+<p>添加服务器配置方法大同小异：</p>
+<ol>
+<li>添加 <code>VMess</code> 服务器</li>
+<li>地址填入域名，端口填入 <code>443</code>，填入用户id、额外id，加密方式选择 <code>auto</code> ，传输协议选择 <code>ws</code>。路径填入 <code>/free</code>，底层传输协议选择 <code>tls</code>。 </li>
+<li>配合 <code>Proxy SwichyOmega</code> 即可食用。</li>
+</ol>
+</div>
+    <div class="post-copyright"><p>除另有声明外，本博客文章均采用 <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">知识共享(Creative Commons) 署名 4.0 国际许可协议</a> 进行许可。转载请注明原作者与文章出处。</p></div>
+  </article>
+
+  
+    <nav class="post-nav">
+      
+      <div class="post-nav-item post-nav-prev">上一篇：
+        <a href="/2019/%E5%AE%89%E8%A3%85-Win10-%E5%AF%BC%E8%87%B4-grub-%E6%8A%A5-unknown-filesystem-%E7%9A%84%E4%BF%AE%E5%A4%8D/">安装 Win10 导致 grub 报 unknown filesystem 的修复</a>
+      </div>
+      
+      
+    </nav>
+  
+
+  
+    
+
+  
+
+      </section>
+      <aside class="sidebar col-md-3 offset-md-1 col-12">
+        
+  
+  <section class="widget widget-toc">
+    <h3 class="widget-title">文章目录</h3>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#时间校准"><span class="toc-text">时间校准</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置服务端"><span class="toc-text">配置服务端</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#生成-UUID"><span class="toc-text">生成 UUID</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#脚本安装-V2Ray"><span class="toc-text">脚本安装 V2Ray</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置-TLS"><span class="toc-text">配置 TLS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#添加域名解析"><span class="toc-text">添加域名解析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#生成证书"><span class="toc-text">生成证书</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#安装证书"><span class="toc-text">安装证书</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置服务端V2Ray"><span class="toc-text">配置服务端V2Ray</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置-Nginx"><span class="toc-text">配置 Nginx</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置客户端"><span class="toc-text">配置客户端</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CLI"><span class="toc-text">CLI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GUI"><span class="toc-text">GUI</span></a></li></ol></li></ol>
+  </section>
+  
+
+        
+
+<section class="widget" id="widget-pages">
+  <h3 class="widget-title">页面</h3>
+  <ul class="menu">
+    
+      
+      <li class="menu-item menu-item-archives">
+        <a href="/archives/" title="">归档</a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-about">
+        <a href="/about/" title="">关于</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section class="widget" id="widget-categories">
+  <h3 class="widget-title">分类</h3>
+  
+  
+    <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/%E4%BF%AE%E5%A4%8D/">修复</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/">安装配置</a></li></ul></li></ul>
+  
+</section>
+
+
+
+<section class="widget" id="widget-links">
+  <h3 class="widget-title">其他</h3>
+  <ul class="menu">
+    
+      
+      <li class="menu-item menu-item-github">
+        <a href="https://github.com/example" title="" target="_blank">GitHub</a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-rss">
+        <a href="/atom.xml" title="" target="_blank">RSS Feed</a>
+      </li>
+    
+  </ul>
+</section>
+
+      </aside>
+    </div>
+  </div>
+</main>
+
+<footer>
+  
+  <div class="container">
+    <p>
+      &copy; 2019 <a href="http://itiandong.com">TILDEN BLOG</a>. Proudly published with <a href="https://hexo.io/" target="_blank">Hexo</a>.
+      Theme <a href="https://github.com/printempw/hexo-theme-murasaki/" target="_blank">Murasaki</a> by printempw.
+    </p>
+  </div>
+</footer>
+
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/han-css@3.3.0/dist/han.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/highlight.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/medium-zoom@1.0.4/dist/medium-zoom.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script>mediumZoom(document.querySelectorAll('.post-content :not(a) > img, .post-content > img'), { margin: 24 });</script>
+
+
+
+</body>
+</html>
