@@ -7,6 +7,7 @@ tags:
   - grub
   - manjaro
 date: 2019-11-04 16:22:20
+permalink: fix-grub-unknown-filesystem-error
 ---
 记录了下在安装 `Manjaro` 的基础上安装 `Windows 10` 而导致的 `grub` 引导失败报 `unknown filesystem` 的修复全过程。
 <!--more-->

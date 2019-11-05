@@ -10,6 +10,7 @@ categories:
     - 一级子分类
 tags:
   - 测试
+permalink: 
 ---
 
 <!--more-->
