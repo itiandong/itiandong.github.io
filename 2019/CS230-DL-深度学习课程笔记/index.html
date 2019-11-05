@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head><meta charset="UTF-8"/>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="CS230-DL 深度学习课程笔记"/><meta name="keywords" content="季天冬, Tilden Ji, 个人, 博客" /><link rel="alternate" href="/default" title="TILDEN BLOG"><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.png?v=2.11.0" />
+<link rel="canonical" href="http://itiandong.com/2019/CS230-DL-深度学习课程笔记/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>CS230-DL 深度学习课程笔记 - TILDEN BLOG</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="mobile-header-logo">
+    <a href="/." class="logo">TILDEN BLOG</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">TILDEN BLOG</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">CS230-DL 深度学习课程笔记
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2019-11-05
+        </span><span class="post-category">
+            <a href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a>
+            <a href="/categories/%E7%AC%94%E8%AE%B0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0-开始"><span class="toc-text">0 开始</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-1-环境配置"><span class="toc-text">0.1 环境配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0-2-参考资源"><span class="toc-text">0.2 参考资源</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-神经网络和深度学习"><span class="toc-text">1 神经网络和深度学习</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-什么是神经网络"><span class="toc-text">1.1 什么是神经网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-什么是监督学习"><span class="toc-text">1.2 什么是监督学习</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-什么是深度学习"><span class="toc-text">1.3 什么是深度学习</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-深度学习为啥突然火了"><span class="toc-text">1.4 深度学习为啥突然火了</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-神经网络编程基础"><span class="toc-text">2. 神经网络编程基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-符号定义"><span class="toc-text">2.1 符号定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-逻辑回归-Logistic-Regression"><span class="toc-text">2.2 逻辑回归 Logistic Regression</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-逻辑回归代价函数-Cost-Function"><span class="toc-text">2.3 逻辑回归代价函数 Cost Function</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-1-损失函数-Loss-Function"><span class="toc-text">2.3.1 损失函数 Loss Function</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-2-代价函数-Cost-Function"><span class="toc-text">2.3.2 代价函数 Cost Function</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-梯度下降算法-Gradient-Descent"><span class="toc-text">2.4 梯度下降算法 Gradient Descent</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-导数-Derivatives"><span class="toc-text">2.5 导数 Derivatives</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-6-逻辑回归中的梯度下降-Logistic-Regression-Gradient-Descent"><span class="toc-text">2.6 逻辑回归中的梯度下降 Logistic Regression Gradient Descent</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-7-m-个样本的梯度下降-Gradient-Descent-on-m-Examples"><span class="toc-text">2.7 m 个样本的梯度下降 Gradient Descent on m Examples</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-8-向量化-Vectorization"><span class="toc-text">2.8 向量化 Vectorization</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-8-1-Python-Numpy-的广播机制"><span class="toc-text">2.8.1 Python Numpy 的广播机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-8-2-Logistic-Regression-前向传播"><span class="toc-text">2.8.2 Logistic Regression 前向传播</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Logistic-Regression-反向传播"><span class="toc-text">Logistic Regression 反向传播</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-9-Numpy-编程小技巧和-Jupyter-notebook"><span class="toc-text">2.9 Numpy 编程小技巧和 Jupyter notebook</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-10-Logistic-损失函数的解释-Explanation-of-logistic-regression-cost-function"><span class="toc-text">2.10 Logistic 损失函数的解释 Explanation of logistic regression cost function</span></a></li></ol></li></ol>
+    </div>
+  </div><div class="post-content"><p><code>CS230</code> 是吴恩达老师推出的深度学习课程。在这门课中，学生将可以学习到深度学习的基础，学会构建神经网络，并用在包括吴恩达本人在内的多位业界顶尖专家指导下创建自己的机器学习项目。 <code>CNN</code>、<code>RNN</code>、<code>LSTM</code> 等都有涉及。本篇是我的关于该课程的学习笔记，更新中 …</p>
+<a id="more"></a>
+<h1 id="0-开始"><a href="#0-开始" class="headerlink" title="0 开始"></a>0 开始</h1><h2 id="0-1-环境配置"><a href="#0-1-环境配置" class="headerlink" title="0.1 环境配置"></a>0.1 环境配置</h2><ul>
+<li><code>Anaconda3</code> Python 包管理软件</li>
+<li><code>Windows 10</code> 可能是宇宙最好用的操作系统</li>
+<li><code>VSCode</code> with <code>Remote Development</code> 论在机房运行代码</li>
+<li><code>Zotero</code> 收纳论文</li>
+</ul>
+<h2 id="0-2-参考资源"><a href="#0-2-参考资源" class="headerlink" title="0.2 参考资源"></a>0.2 参考资源</h2><ul>
+<li><a href="http://cs230.stanford.edu/" target="_blank" rel="noopener">课程官网</a> </li>
+<li><a href="https://wdxtub.com/course/cs230-00/2019/10/11/" target="_blank" rel="noopener">【CS230-DL】小土刀笔记</a></li>
+<li><a href="https://github.com/fengdu78/deeplearning_ai_books" target="_blank" rel="noopener">黄海广博士的深度学习笔记</a> </li>
+<li><a href="https://book.douban.com/subject/34811599/" target="_blank" rel="noopener">《深度学习》张宪超</a></li>
+</ul>
+<h1 id="1-神经网络和深度学习"><a href="#1-神经网络和深度学习" class="headerlink" title="1 神经网络和深度学习"></a>1 神经网络和深度学习</h1><h2 id="1-1-什么是神经网络"><a href="#1-1-什么是神经网络" class="headerlink" title="1.1 什么是神经网络"></a>1.1 什么是神经网络</h2><p>假如，我们需要根据面积预测房价，于是收集了一些真实的数据，</p>
+<p> <img src="1-1.jpg" alt="img"> </p>
+<p>为了完成预测，最简单的方式是根据这些数据做下线性回归，得到上图中的蓝色直线，然后修正下房价为 0 的情况。注意这里的流程是先判断可以做线性回归，然后找到这条线。（ps，这个函数其实非常有名，一般管它叫  <strong>ReLU</strong> 激活函数，全称 <strong>Rectified Linear Unit</strong>）</p>
+<p>而对于神经网络而言，逻辑就有所变化。我们不需要关心函数的形式，也不需要深奥的数学理论，只需要如同组装乐高积木一般组合若干及其简单的神经元，再提供足够数量的数据，便可以做出较好的预测。</p>
+<p> <img src="1-2.jpg" alt="img"></p>
+<h2 id="1-2-什么是监督学习"><a href="#1-2-什么是监督学习" class="headerlink" title="1.2 什么是监督学习"></a>1.2 什么是监督学习</h2><p>上一小节的例子便是一种监督学习。简单来说，监督学习就是给了标准答案的机器学习过程。教科书中这样描述监督学习，“监督学习是利用有标签的数据样本进行训练的一种机器学习方法。因为它所利用的训练样本集的标签是人工添加的，在训练前已知，因此它被称为监督学习”。</p>
+<h2 id="1-3-什么是深度学习"><a href="#1-3-什么是深度学习" class="headerlink" title="1.3 什么是深度学习"></a>1.3 什么是深度学习</h2><p><strong>深度学习</strong>（英语：deep learning）是机器学习的分支，是一种以人工神经网络为架构，对数据进行表征学习的算法。</p>
+<p>《深度学习》中对深度学习的体系做出了如下归纳</p>
+<p><img src="image-20191104105707102.png" alt="image-20191104105707102"></p>
+<h2 id="1-4-深度学习为啥突然火了"><a href="#1-4-深度学习为啥突然火了" class="headerlink" title="1.4 深度学习为啥突然火了"></a>1.4 深度学习为啥突然火了</h2><ol>
+<li><p>数据多了</p>
+</li>
+<li><p>计算能力强了，<strong>GPU</strong></p>
+</li>
+<li><p>方法的改进</p>
+<p><strong>sigmod</strong> 改为 <strong>ReLU</strong></p>
+<p> <img src="1a3d288dc243ca9c5a70a69799180c4a.png" alt="img"></p>
+</li>
+</ol>
+<h1 id="2-神经网络编程基础"><a href="#2-神经网络编程基础" class="headerlink" title="2. 神经网络编程基础"></a>2. 神经网络编程基础</h1><h2 id="2-1-符号定义"><a href="#2-1-符号定义" class="headerlink" title="2.1 符号定义"></a>2.1 符号定义</h2><p>$x$：表示一个$n_x$维数据，为输入数据，维度为$(n_x,1)$； </p>
+<p>$y$：表示输出结果，取值为$(0,1)$；</p>
+<p>$(x^{(i)},y^{(i)})$：表示第$i$组数据，可能是训练数据，也可能是测试数据，此处默认为训练数据； </p>
+<p>$X=[x^{(1)},x^{(2)},…,x^{(m)}]$：表示所有的训练数据集的输入值，放在一个 $n_x×m$的矩阵中，其中$m$表示样本数目; </p>
+<p>$Y=[y^{(1)},y^{(2)},…,y^{(m)}]$：对应表示所有训练数据集的输出值，维度为$1×m$。</p>
+<h2 id="2-2-逻辑回归-Logistic-Regression"><a href="#2-2-逻辑回归-Logistic-Regression" class="headerlink" title="2.2 逻辑回归 Logistic Regression"></a>2.2 逻辑回归 Logistic Regression</h2><p>逻辑回归是一个适用于二分类问题的算法。</p>
+<p>二分类算法是给定一个输入特征向量 $X$ ，输出 $\hat{y}$ ，代表对实际值 $y$ 的估计，具体的说，表示 $y$ 等于 1 的概率。</p>
+<p>逻辑回归有两个参数：</p>
+<ul>
+<li>$w$ 逻辑回归参数，或者说特征权重（维度与特征向量相同）</li>
+<li>$b$ 一个实数，表示偏差。</li>
+</ul>
+<p>公式如下：<br>$$<br>\hat{y} = \sigma \left( { {w}^{T}}x+b \right) \<br>\sigma \left( z \right)=\frac{1}{1+{ {e}^{-z}}}<br>$$<br><img src="image-20191104150341382.png" alt="image-20191104150341382"></p>
+<h2 id="2-3-逻辑回归代价函数-Cost-Function"><a href="#2-3-逻辑回归代价函数-Cost-Function" class="headerlink" title="2.3 逻辑回归代价函数 Cost Function"></a>2.3 逻辑回归代价函数 Cost Function</h2><h3 id="2-3-1-损失函数-Loss-Function"><a href="#2-3-1-损失函数-Loss-Function" class="headerlink" title="2.3.1 损失函数 Loss Function"></a>2.3.1 损失函数 Loss Function</h3><p>损失函数又称误差函数，用来衡量算法的运行情况。</p>
+<p>一般来说，损失函数会定义为预测值和实际值差的平方，或者差的平方的一般，但一般在逻辑回归中用到的损失函数定义为如下形式：<br>$$<br>L\left( \hat{y},y \right)=-y\log(\hat{y})-(1-y)\log (1-\hat{y})<br>$$<br>这是为了适应梯度下降算法，使用差平方的话，函数是非凸的，梯度下降算法可能找不到全局最优值。</p>
+<h3 id="2-3-2-代价函数-Cost-Function"><a href="#2-3-2-代价函数-Cost-Function" class="headerlink" title="2.3.2 代价函数 Cost Function"></a>2.3.2 代价函数 Cost Function</h3><p>损失函数是相较于单个样本而言的，而为了衡量算法对于所有样本的运行情况，引入了代价函数。代价函数被定义为所有样本的平均损失函数：</p>
+<p>$$<br>J\left( w,b \right)=\frac{1}{m}\sum\limits_{i=1}^{m}{L\left( { { {\hat{y}}}^{(i)}},{ {y}^{(i)}} \right)}=\frac{1}{m}\sum\limits_{i=1}^{m}{\left( -{ {y}^{(i)}}\log { { {\hat{y}}}^{(i)}}-(1-{ {y}^{(i)}})\log (1-{ { {\hat{y}}}^{(i)}}) \right)}<br>$$<br>在训练逻辑回归模型时，我们的任务是学习到合适的 $w$ 和 $b$ ，使得代价函数的值最小。那如何训练呢？常用的是一种被称为梯度下降的方法。</p>
+<h2 id="2-4-梯度下降算法-Gradient-Descent"><a href="#2-4-梯度下降算法-Gradient-Descent" class="headerlink" title="2.4 梯度下降算法 Gradient Descent"></a>2.4 梯度下降算法 Gradient Descent</h2><p>为了简化表示，假设作为凸函数的代价函数图案如下：</p>
+<p> <img src="27be50001e7a91bd2abaaeaf7aba7cd4.jpg" alt="img"> </p>
+<p>初始化 $w$，然后不断循环的做如下计算</p>
+<p> <img src="60cc674531ac72b2d75b0c447db95e96.jpg" alt="img"> </p>
+<p>$:=$ 海象表达式，这里表示更新参数</p>
+<p>$\alpha$ 学习率 <strong>learning rate</strong> ，用来控制步长 <strong>step</strong></p>
+<p>可以发现，$w$ 在这个更新过程中不断朝左移动，直到逼近最小值点：</p>
+<p> <img src="4fb3b91114ecb2cd81ec9f3662434d81.jpg" alt="img"> </p>
+<p>如果 $w$ 初始化在左侧，同理。</p>
+<p>逻辑回归的 Cost Function 为 $J(w,b)$，相应的更新迭代计算为：</p>
+<p> <img src="593eb7e2835b4f3c3aa8185cfa76155c.png" alt="img"> </p>
+<p>$\partial $ 是偏导符号（求导符号在多元函数下的特殊写法），读作 <code>round</code>、<code>partial</code> 或者 <code>dee</code>都可以。</p>
+<p>另外，在编程的时候，为了方便，$\frac{\partial J(w,b)}{\partial w}$ 会直接写作 <code>dw</code></p>
+<h2 id="2-5-导数-Derivatives"><a href="#2-5-导数-Derivatives" class="headerlink" title="2.5 导数 Derivatives"></a>2.5 导数 Derivatives</h2><p>略。</p>
+<ol>
+<li>导数就是斜率。</li>
+<li>如果你要求一个函数的导数，可以自己求、查课本、查维基百科或者试试 <a href="https://www.wolframalpha.com/" target="_blank" rel="noopener">WolframAlpha</a> ?</li>
+</ol>
+<h2 id="2-6-逻辑回归中的梯度下降-Logistic-Regression-Gradient-Descent"><a href="#2-6-逻辑回归中的梯度下降-Logistic-Regression-Gradient-Descent" class="headerlink" title="2.6 逻辑回归中的梯度下降 Logistic Regression Gradient Descent"></a>2.6 逻辑回归中的梯度下降 Logistic Regression Gradient Descent</h2><p>假设样本只有两个特征 $x_1$ 和 $x_2$，输入参数为 $w_1$ 和 $w_2$，此时，计算图如下：</p>
+<p> <img src="03f5f96177ab15d5ead8298ba50300ac.jpg" alt="2017-08-16 16-05-25"> </p>
+<p>反向依次计算导数：</p>
+<p>$\frac{da}{dz}=a\cdot (1-a)$</p>
+<p>$da = \frac{dL(a,y)}{da}=-y/a+(1-y)/(1-a)$</p>
+<p>$dz=\frac{dL(a,y)}{dz}=(\frac{dL}{da})\cdot (\frac{da}{dz})=a - y$</p>
+<p>$d{ {w}<em>{1}}={ {x}</em>{1}}\cdot dz$</p>
+<p>$d{ {w}<em>{2}}={ {x}</em>{2}}\cdot dz$</p>
+<p>$db=dz$</p>
+<p>相应的，更新函数如下：</p>
+<p>${ {w}<em>{1}}:={ {w}</em>{1}}-\alpha\cdot d{ {w}<em>{1}}$，<br>${ {w}</em>{2}}:={ {w}<em>{2}}-\alpha\cdot d{ {w}</em>{2}}$，<br>$b:=b-\alpha\cdot db$。</p>
+<h2 id="2-7-m-个样本的梯度下降-Gradient-Descent-on-m-Examples"><a href="#2-7-m-个样本的梯度下降-Gradient-Descent-on-m-Examples" class="headerlink" title="2.7 m 个样本的梯度下降 Gradient Descent on m Examples"></a>2.7 m 个样本的梯度下降 Gradient Descent on m Examples</h2><p>m 个样本的整体损失函数被定义为：</p>
+<p>$$<br>J(w,b)=\frac{1}{m}\sum\limits_{i=1}^{m}{L({ {a}^{(i)}},{ {y}^{(i)}})}<br>$$</p>
+<p>而将上一节中单样本梯度下降应用到 m 个样本上，可以总结为如下伪代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">J=0;dw1=0;dw2=0;db=0;</span><br><span class="line">for i = 1 to m</span><br><span class="line">    z(i) = wx(i)+b;</span><br><span class="line">    a(i) = sigmoid(z(i));</span><br><span class="line">    J += -[y(i)log(a(i))+(1-y(i)）log(1-a(i));</span><br><span class="line">    dz(i) = a(i)-y(i);</span><br><span class="line">    dw1 += x1(i)dz(i);</span><br><span class="line">    dw2 += x2(i)dz(i);</span><br><span class="line">    db += dz(i);</span><br><span class="line">J/= m;</span><br><span class="line">dw1/= m;</span><br><span class="line">dw2/= m;</span><br><span class="line">db/= m;</span><br><span class="line">w=w-alpha*dw</span><br><span class="line">b=b-alpha*db</span><br></pre></td></tr></table></figure>
+
+<p>但这段代码中存在两处<code>for循环</code>（如果把针对每个特征计算梯度算作一个 for 的话），事实上这两个 for 可以利用一种称作 <code>向量化</code> 的技术去除，使得计算更快的执行。</p>
+<h2 id="2-8-向量化-Vectorization"><a href="#2-8-向量化-Vectorization" class="headerlink" title="2.8 向量化 Vectorization"></a>2.8 向量化 Vectorization</h2><p>向量化往往能加速运算，原因在于一些高级编程语言的类库在处理向量化的运算时能充分利用现代 GPU 或者 CPU 的并行化 API。</p>
+<h3 id="2-8-1-Python-Numpy-的广播机制"><a href="#2-8-1-Python-Numpy-的广播机制" class="headerlink" title="2.8.1 Python Numpy 的广播机制"></a>2.8.1 Python Numpy 的广播机制</h3><p>Numpy 为了计算方便，引入了广播机制 broadcasting，类似于 <code>Matlab/Octave</code> 的 <code>bsxfun</code> 函数。简单来说，广播机制能够自动扩充矩阵，使运算正确进行。广播机制可总结为下图：</p>
+<p><img src="695618c70fd2922182dc89dca8eb83cc.png" alt=""></p>
+<h3 id="2-8-2-Logistic-Regression-前向传播"><a href="#2-8-2-Logistic-Regression-前向传播" class="headerlink" title="2.8.2 Logistic Regression 前向传播"></a>2.8.2 Logistic Regression 前向传播</h3><p>$Z = [z^{(1)} z^{(2)}…z^{(m)}]$</p>
+<p>$Z = w^{T}X+[b b…b]$</p>
+<p>$(1, m) = (1,n_x)\cdot(n_x, m)+(1,m)$</p>
+<p>在 <code>Python</code> 中，利用 <code>numpy</code> 的广播特性，代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Z = np.dot(w.T, X) + b</span><br></pre></td></tr></table></figure>
+
+<h3 id="Logistic-Regression-反向传播"><a href="#Logistic-Regression-反向传播" class="headerlink" title="Logistic Regression 反向传播"></a>Logistic Regression 反向传播</h3><p>$Z = w^{T}X + b$</p>
+<p>$A = \sigma( Z )$</p>
+<p>$dZ = A - Y$</p>
+<p>${ {dw} = \frac{1}{m}X\cdot dZ^{T}\ }$</p>
+<p>$db= \frac{1}{m}np.sum( dZ)$</p>
+<p>$w: = w - \alpha \cdot dw$</p>
+<p>$b: = b - \alpha \cdot db$</p>
+<h2 id="2-9-Numpy-编程小技巧和-Jupyter-notebook"><a href="#2-9-Numpy-编程小技巧和-Jupyter-notebook" class="headerlink" title="2.9 Numpy 编程小技巧和 Jupyter notebook"></a>2.9 Numpy 编程小技巧和 Jupyter notebook</h2><p>广播特性可能引入难以调试的bug。一些技巧可以一定程度上避免错误发生。</p>
+<ol>
+<li>避免使用 <code>Python</code> 1维数组。如用 <code>np.random.randn(5,1)</code> 代替 <code>np.random.randn(5)</code>，前者是一个矩阵，而后者是一个 1 维数组。在 Python 中调用一维数组的转置会返回一维数组，此时，若 n 是一个一维数组，计算 <code>np.dot(a, a.T)</code> 会错误的使用传播特性返回一个矩阵，而非向量的内积。 </li>
+<li>善用 <code>reshape</code> 和 <code>assert</code>。如 <code>assert(a.shape == (5,1))</code></li>
+</ol>
+<p>Jupyter notebook 是一个将 Python 交互式 shell 和 Markdown 结合的工具，能使你快速地实现代码并且查看输出结果，便于学习。最新版本的 VSCode 已经内置了 notebook 功能。</p>
+<h2 id="2-10-Logistic-损失函数的解释-Explanation-of-logistic-regression-cost-function"><a href="#2-10-Logistic-损失函数的解释-Explanation-of-logistic-regression-cost-function" class="headerlink" title="2.10 Logistic 损失函数的解释 Explanation of logistic regression cost function"></a>2.10 Logistic 损失函数的解释 Explanation of logistic regression cost function</h2><p>前面直接给出了 Logistic 损失函数的定义，即：<br>$$<br>L\left( \hat{y},y \right)=-y\log(\hat{y})-(1-y)\log (1-\hat{y})<br>$$<br>这里给出简单的推导：</p>
+<p>注意 $y$ 的取值为 ${0,1}$ ，因为  $\hat{y}=p(y=1|x)$，故：</p>
+<p><img src="asfasdfdsgasag.jpg" alt="asfasdfdsgasag"></p>
+<p>上述两式可以合并为，$p(y|x)={\hat{y}}^{y}{(1-\hat{y})}^{(1-y)}$, 不难看出，无论是 $y=0$ 或 $y=1$ 时，我们都想最大化 $p(y|x)$。</p>
+<p>对上式取下对数，得到：$log(p(y|x))=ylog\hat{y}+(1-y)log(1-\hat{y})$，为保持语义上的一致，填上符号，就得到了前述的损失函数定义，</p>
+<p>假设所有样本服从同一分布且相互独立，样本的联合概率为：</p>
+<p>$$<br>P\left(\text{labels  in training set} \right) = \prod_{i =1}^{m}{P(y^{(i)}|x^{(i)})}<br>$$<br>进行极大似然估计（找到一组参数，使得给定样本的观测值最大），填上负号，就推导出了 Logistic 回归的代价函数：</p>
+<p>$$<br>J(w,b)= \sum_{i = 1}^{m}{L(\hat y^{(i)},y^{\hat( i)})}<br>$$</p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="http://itiandong.com">Tilden Ji</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="http://itiandong.com/2019/CS230-DL-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/">http://itiandong.com/2019/CS230-DL-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/%E7%AC%94%E8%AE%B0/">笔记</a>
+            <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+            <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+            </div>
+        
+        <nav class="post-nav"><a class="next" href="/2019/%E5%AE%89%E8%A3%85-Win10-%E5%AF%BC%E8%87%B4-grub-%E6%8A%A5-unknown-filesystem-%E7%9A%84%E4%BF%AE%E5%A4%8D/">
+        <span class="next-text nav-default">安装 Win10 导致 grub 报 unknown filesystem 的修复</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:j@itiandong.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/itiandong" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2019<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Tilden Ji</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

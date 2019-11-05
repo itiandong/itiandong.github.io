@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head><meta charset="UTF-8"/>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="安装 Win10 导致 grub 报 unknown filesystem 的修复"/><meta name="keywords" content="季天冬, Tilden Ji, 个人, 博客" /><link rel="alternate" href="/default" title="TILDEN BLOG"><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.png?v=2.11.0" />
+<link rel="canonical" href="http://itiandong.com/2019/安装-Win10-导致-grub-报-unknown-filesystem-的修复/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>安装 Win10 导致 grub 报 unknown filesystem 的修复 - TILDEN BLOG</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="mobile-header-logo">
+    <a href="/." class="logo">TILDEN BLOG</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">TILDEN BLOG</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">安装 Win10 导致 grub 报 unknown filesystem 的修复
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2019-11-04
+        </span><span class="post-category">
+            <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+            <a href="/categories/%E6%8A%80%E6%9C%AF/%E4%BF%AE%E5%A4%8D/">修复</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#TL-DR"><span class="toc-text">TL;DR</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#问题描述"><span class="toc-text">问题描述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#解决"><span class="toc-text">解决</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Grub-运行模式"><span class="toc-text">Grub 运行模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修复-grub-配置"><span class="toc-text">修复 grub 配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#（可选）控制台模式"><span class="toc-text">（可选）控制台模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#更新-grub"><span class="toc-text">更新 grub</span></a></li></ol></li></ol>
+    </div>
+  </div><div class="post-content"><p>记录了下在安装 <code>Manjaro</code> 的基础上安装 <code>Windows 10</code> 而导致的 <code>grub</code> 引导失败报 <code>unknown filesystem</code> 的修复全过程。</p>
+<a id="more"></a>
+<h1 id="TL-DR"><a href="#TL-DR" class="headerlink" title="TL;DR"></a>TL;DR</h1><p><strong>适用于 UEFI ！！！</strong></p>
+<p><code>grub rescue</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">迭代 ls 找到 manjaro 所在的分区 (hdx,gptx)</span><br><span class="line">set prefix=(hdx,gptx)/boot/grub</span><br><span class="line">set root=hdx,gptx</span><br><span class="line">insmod normal</span><br><span class="line">normal</span><br></pre></td></tr></table></figure>
+
+<p><code>进入系统后</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mount | grep /boot/efi <span class="comment"># 找到 efi 所在分区 /dev/sdax</span></span><br><span class="line">sudo update-grub</span><br><span class="line">sudo grub-install /dev/sdax</span><br></pre></td></tr></table></figure>
+
+<p>完结撒花！</p>
+<h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><p>因为种种原因，需要在笔记本上临时装个 <code>Win10</code>。于是找到启动盘，安装镜像，一顿操作后重启。发现居然直接进了 <code>Win10</code> ，隐约感觉有点不对劲，但忍住疑惑开始边进行繁琐的 <code>Win10</code> 配置， 边观看世界赛半决赛 T1 vs G2。配置的差不多后重启进入 <code>Manjaro</code> 却悲剧了。告诉我引导失败，报了 <code>unknown filesystem</code>，并贴心的进入了 <code>grub rescue</code> 模式。这时反应过来可能是安装工具改了磁盘挂载导致 <code>grub</code> 加载失败。</p>
+<h1 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h1><h2 id="Grub-运行模式"><a href="#Grub-运行模式" class="headerlink" title="Grub 运行模式"></a>Grub 运行模式</h2><p><code>Grub</code> 有两种运行模式， <code>normal</code> 和 <code>rescue</code> ，<code>normal</code> 就是正常情况下那个包含了菜单界面的模式，而当 <code>grub</code> 发现错误时，就会进入 <code>rescue</code> 模式</p>
+<p><code>rescue</code> 的常用命令如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">set</td>
+<td align="center">查看、编辑环境变量</td>
+</tr>
+<tr>
+<td align="center">ls</td>
+<td align="center">查看分区信息</td>
+</tr>
+<tr>
+<td align="center">insmod</td>
+<td align="center">加载模块</td>
+</tr>
+</tbody></table>
+<h2 id="修复-grub-配置"><a href="#修复-grub-配置" class="headerlink" title="修复 grub 配置"></a>修复 <code>grub</code> 配置</h2><ol>
+<li>使用 <code>ls</code> 命令，列出所有分区。</li>
+<li>依次使用 <code>ls (分区)/</code> 命令，直到分区可读且列出了 <code>Manjaro</code> 的 <code>/</code> 为止。记下根目录所在分区 <code>(hdx,gptx)</code>。</li>
+<li>输入 <code>set prefix=(hdx,gptx)/boot/grub</code> 和 <code>set root=hdx,gptx</code>，更改环境变量 <code>prefix</code> 和 <code>root</code>。</li>
+<li>执行 <code>insmod normal</code> 载入 <code>normal</code> 模块</li>
+<li>执行 <code>normal</code> 进入 normal 模式，此时应该可以正常引导进入 <code>Manjaro</code>.</li>
+</ol>
+<h2 id="（可选）控制台模式"><a href="#（可选）控制台模式" class="headerlink" title="（可选）控制台模式"></a>（可选）控制台模式</h2><p>该小节来自网络，没有尝试过</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">进入普通模式，出现菜单，如果加载grub.cfg（错误的）可能出现问题，按shift可以出现菜单，之后按c键进入控制台</span><br></pre></td></tr></table></figure>
+
+<p>进入正常模式后就会出现<code>grub&gt;</code>这样的提示符，在这里支持的命令就非常多了。 </p>
+<p>引导系统</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">set root=(hd0,msdos1)  #设置正常启动分区</span><br><span class="line">linux /boot/vmlinuz ....  ro text root=/dev/sda1  #加载内核，进入控制台模式</span><br><span class="line">initrd  /boot/initrd ....  #加载initrd.img</span><br><span class="line">boot #引导</span><br></pre></td></tr></table></figure>
+
+<h2 id="更新-grub"><a href="#更新-grub" class="headerlink" title="更新 grub"></a>更新 <code>grub</code></h2><p>进入系统后，打开终端：</p>
+<ol>
+<li>执行 <code>mount | grep /boot/efi</code>，记下 <code>efi</code> 分区的位置 <code>/dev/sdax</code></li>
+<li>执行 <code>sudo update-grub</code> ，该操作会自动检测安装的操作系统，更新 <code>grub</code> 菜单。</li>
+<li>执行 <code>sudo grub-install /dev/sdax</code>，重新安装。</li>
+</ol>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="http://itiandong.com">Tilden Ji</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="http://itiandong.com/2019/%E5%AE%89%E8%A3%85-Win10-%E5%AF%BC%E8%87%B4-grub-%E6%8A%A5-unknown-filesystem-%E7%9A%84%E4%BF%AE%E5%A4%8D/">http://itiandong.com/2019/%E5%AE%89%E8%A3%85-Win10-%E5%AF%BC%E8%87%B4-grub-%E6%8A%A5-unknown-filesystem-%E7%9A%84%E4%BF%AE%E5%A4%8D/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/grub/">grub</a>
+            <a href="/tags/manjaro/">manjaro</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2019/CS230-DL-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">CS230-DL 深度学习课程笔记</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2019/V2Ray-%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/">
+        <span class="next-text nav-default">V2Ray 安装配置</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:j@itiandong.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/itiandong" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2019<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Tilden Ji</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
